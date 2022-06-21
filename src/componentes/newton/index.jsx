@@ -6,7 +6,7 @@ const Newton = () => {
     <div style={{ margin: "20px", maxWidth: "800px", width: "100%" }}>
       <h3>Newton</h3>
       <div
-        style={{ display: "flex", flexDirection: "row", marginBottom: "20px" }}
+        style={{ display: "flex", marginBottom: "20px" }}
       >
         <img
           src={NewtonImg}

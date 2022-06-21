@@ -5,55 +5,66 @@ const Calculadora = () => {
   const [vectores, setVectores] = useState([
     {
       id: 0,
-      angulo: null,
-      magnitud: null,
-      x: null,
-      y: null,
+      x: 0,
+      y: 0,
     },
   ]);
   const [finalVector, setFinalVector] = useState({});
 
   const agregarVector = () => {
     setVectores([
+      // Copiar vectores actuales
       ...vectores,
+      // Agregar un nuevo vector
       {
         id: Math.random(),
-        angulo: null,
-        magnitud: null,
-        x: null,
-        y: null,
+        x: 0,
+        y: 0,
       },
     ]);
   };
 
   const eliminarVector = () => {
-    const newVectores = [...vectores];
-    newVectores.splice(-1);
-    setVectores(newVectores);
+    const nuevosVectores = [...vectores];
+    // Eliminar el último vector
+    nuevosVectores.splice(-1);
+    setVectores(nuevosVectores);
   };
 
   const onX = (id, nuevaX) => {
-    const newVectores = vectores.map((vec) => {
-      if (vec.id === id) vec.x = nuevaX;
-      return vec;
-    });
+    const nuevosVectores = [];
 
-    setVectores([...newVectores]);
+    for (let i = 0; i < vectores.length; i++) {
+      if (vectores[i].id === id) {
+        vectores[i].x = nuevaX;
+      }
+      // Agregar el vector a la lista
+      nuevosVectores.push(vectores[i]);
+    }
+
+    setVectores(nuevosVectores);
   };
 
   const onY = (id, nuevaY) => {
-    const newVectores = vectores.map((vec) => {
-      if (vec.id === id) vec.y = nuevaY;
-      return vec;
-    });
+    const nuevosVectores = [];
 
-    setVectores([...newVectores]);
+    for (let i = 0; i < vectores.length; i++) {
+      if (vectores[i].id === id) {
+        vectores[i].y = nuevaY;
+      }
+      // Agregar el vector a la lista
+      nuevosVectores.push(vectores[i]);
+    }
+
+    setVectores(nuevosVectores);
   };
 
   const obtenerMagnitud = (vector) => {
     const x = vector.x;
     const y = vector.y;
 
+    // Si no existe x o y, no se puede calcular la magnitud
+    // y se retorna 0 por defecto con dos decimales
     if (!x && !y) return (0).toFixed(2);
 
     const magnitud = Math.sqrt(x * x + y * y);
@@ -64,22 +75,27 @@ const Calculadora = () => {
     const x = vector.x;
     const y = vector.y;
 
+    // Si no existe x o y, no se puede calcular el angulo
+    // y se retorna 0 por defecto con dos decimales
     if (!x && !y) return (0).toFixed(2);
 
     const angulo = (Math.atan(y / x) * 180) / Math.PI;
     return angulo.toFixed(2);
   };
 
+  // Actualizar el vector final cada vez que
+  // cambia(eliminar, agregar, o que camibie x o y de algun vector) 
+  // la lista de vectores
   useEffect(() => {
     let vector = {
       x: 0,
       y: 0,
     };
 
-    vectores.forEach((vec) => {
-      vector.x += +vec.x;
-      vector.y += +vec.y;
-    });
+    for (let i = 0; i < vectores.length; i++) {
+      vector.x += vectores[i].x;
+      vector.y += vectores[i].y;
+    }
 
     setFinalVector(vector);
   }, [vectores]);
@@ -126,26 +142,24 @@ const Calculadora = () => {
                 <Form.Control
                   type="number"
                   value={vector.x}
-                  onChange={(e) => onX(vector.id, e.target.value)}
+                  onChange={(event) => onX(vector.id, event.target.value)}
                 />
               </td>
               <td>
                 <Form.Control
                   type="number"
                   value={vector.y}
-                  onChange={(e) => onY(vector.id, e.target.value)}
+                  onChange={(event) => onY(vector.id, event.target.value)}
                 />
               </td>
               <td>
                 <Form.Control
-                  type="number"
                   value={obtenerMagnitud(vector)}
                   disabled
                 />
               </td>
               <td>
                 <Form.Control
-                  type="number"
                   value={obtenerAngulo(vector)}
                   disabled
                 />

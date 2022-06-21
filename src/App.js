@@ -21,8 +21,8 @@ function App() {
         id="newton"
         style={{
           display: "flex",
-          alignItems: "center",
           flexDirection: "column",
+          alignItems: "center",
         }}
       >
         <Newton />
